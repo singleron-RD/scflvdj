@@ -55,9 +55,11 @@ def csv2dict(csv_file):
         data[row[0]] = row[1]
     return data
 
+
 def rev_compl(st):
-    nn = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A', 'N':'N'}
+    nn = {"A": "T", "C": "G", "G": "C", "T": "A", "N": "N"}
     return "".join(nn[n] for n in reversed(st))
+
 
 def add_log(func):
     """

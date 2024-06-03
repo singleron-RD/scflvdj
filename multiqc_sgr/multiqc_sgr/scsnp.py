@@ -21,8 +21,8 @@ class MultiqcModule(BaseMultiqcModule):
     def __init__(self):
         # Initialise the parent object
         super().__init__(
-            name="scflvdj",
-            anchor="scflvdj",
+            name="scsnp",
+            anchor="scsnp",
             info="Single cell amplicon variant calling.",
         )
 
@@ -38,7 +38,7 @@ class MultiqcModule(BaseMultiqcModule):
 
         self.add_section(
             name="Gene",
-            anchor="scflvdj_gene",
+            anchor="scsnp_gene",
             helptext="Cell Reads assigned to each gene",
             plot=self.gene_bar(gene_data),
         )
@@ -63,7 +63,7 @@ class MultiqcModule(BaseMultiqcModule):
 
                 """
         self.add_section(
-            name="Variant after filtering", anchor="scflvdj_meta", helptext=helptext, plot=self.meta_table(meta_data)
+            name="Variant after filtering", anchor="scsnp_meta", helptext=helptext, plot=self.meta_table(meta_data)
         )
 
         helptext = """
@@ -75,7 +75,7 @@ class MultiqcModule(BaseMultiqcModule):
             
             'NA' means not available(no reads at this position were found).
             """
-        self.add_section(name="Variant count", anchor="scflvdj_count", helptext=helptext, plot=self.count_bar(count_data))
+        self.add_section(name="Variant count", anchor="scsnp_count", helptext=helptext, plot=self.count_bar(count_data))
 
         # Superfluous function call to confirm that it is used in this module
         # Replace None with actual version if it is available
@@ -83,11 +83,11 @@ class MultiqcModule(BaseMultiqcModule):
 
     def parse_json(self, seg):
         data_dict = defaultdict(dict)
-        for f in self.find_log_files(f"scflvdj/{seg}"):
+        for f in self.find_log_files(f"scsnp/{seg}"):
             parsed_data = json.loads(f["f"])
             if parsed_data is not None:
                 x = f["s_name"]
-                s_name = x[: x.find(".scflvdj")]
+                s_name = x[: x.find(".scsnp")]
                 if s_name in data_dict:
                     log.info(f"Duplicate sample name found! Update: {s_name}")
                 self.add_data_source(f, s_name=s_name, section=seg)
@@ -95,9 +95,9 @@ class MultiqcModule(BaseMultiqcModule):
 
         data_dict = self.ignore_samples(data_dict)
 
-        log.info(f"Found {len(data_dict)} scflvdj {seg} reports")
+        log.info(f"Found {len(data_dict)} scsnp {seg} reports")
         # Write parsed report data to a file
-        self.write_data_file(data_dict, f"multiqc_scflvdj_{seg}")
+        self.write_data_file(data_dict, f"multiqc_scsnp_{seg}")
         return data_dict
 
     def general_stats(self, stats_data):
@@ -153,7 +153,7 @@ class MultiqcModule(BaseMultiqcModule):
             for name in meta_data[sample]:
                 name_meta[name] = meta_data[sample][name]
         table_config = {
-            "id": "scflvdj_meta",
+            "id": "scsnp_meta",
             "title": "Variant after filtering",
             "col1_header": "Variant",
         }

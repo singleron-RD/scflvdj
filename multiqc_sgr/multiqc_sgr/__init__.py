@@ -13,9 +13,9 @@ def multiqc_sgr_config():
         "scrna/median_gene": {
             "fn": "*scrna.median_gene.json",
         },
-        "scflvdj/stats": {"fn": "*scflvdj.*stats.json"},
-        "scflvdj/gene": {"fn": "*scflvdj.gene.json"},
-        "scflvdj/count": {"fn": "*scflvdj.count.json"},
-        "scflvdj/meta": {"fn": "*scflvdj.meta.json"},
+        "scsnp/stats": {"fn": "*scsnp.*stats.json"},
+        "scsnp/gene": {"fn": "*scsnp.gene.json"},
+        "scsnp/count": {"fn": "*scsnp.count.json"},
+        "scsnp/meta": {"fn": "*scsnp.meta.json"},
     }
     config.update_dict(config.sp, sgr_search_patterns)
