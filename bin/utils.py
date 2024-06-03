@@ -1,9 +1,9 @@
+import csv
 import gzip
 import json
 import logging
 import sys
 import time
-from collections import defaultdict
 from datetime import timedelta
 from functools import wraps
 
@@ -29,6 +29,7 @@ def fastq_str(name, seq, qual):
 
 
 def get_logger(name, level=logging.INFO):
+    """out to stderr"""
     logger = logging.getLogger(name)
     logger.setLevel(level)
     log_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -43,12 +44,20 @@ def write_json(data, fn):
         json.dump(data, f, indent=4)
 
 
-def nested_defaultdict(dim=3, val_type=int):
-    if dim == 1:
-        return defaultdict(val_type)
-    else:
-        return defaultdict(lambda: nested_defaultdict(dim - 1, val_type=val_type))
+def get_frac(raw_frac: float):
+    return round(float(raw_frac) * 100, 2)
 
+
+def csv2dict(csv_file):
+    data = {}
+    reader = csv.reader(openfile(csv_file))
+    for row in reader:
+        data[row[0]] = row[1]
+    return data
+
+def rev_compl(st):
+    nn = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A', 'N':'N'}
+    return "".join(nn[n] for n in reversed(st))
 
 def add_log(func):
     """

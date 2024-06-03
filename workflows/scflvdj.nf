@@ -5,15 +5,6 @@
 */
 
 include { FASTQC                 } from '../modules/nf-core/fastqc/main'
-include { SAMTOOLS_INDEX         } from '../modules/nf-core/samtools/index/main'
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX2        } from '../modules/nf-core/samtools/index/main'
-include { SAMTOOLS_FAIDX         } from '../modules/nf-core/samtools/faidx/main'
-include { GATK4_CREATESEQUENCEDICTIONARY } from '../modules/nf-core/gatk4/createsequencedictionary/main'
-include { GATK4_SPLITNCIGARREADS } from '../modules/nf-core/gatk4/splitncigarreads/main'
-include { FREEBAYES              } from '../modules/nf-core/freebayes/main'
-include { BCFTOOLS_FILTER        } from '../modules/nf-core/bcftools/filter/main'
-include { SNPEFF_DOWNLOAD        } from '../modules/nf-core/snpeff/download/main'
-include { SNPEFF_SNPEFF          } from '../modules/nf-core/snpeff/snpeff/main'
 
 include { PROTOCOL_CMD           } from '../modules/local/protocol_cmd'
 include { STARSOLO_READS         } from '../modules/local/starsolo_reads'
@@ -178,14 +169,13 @@ workflow scflvdj {
     ch_samplesheet.multiMap { meta, fastq, match_barcode ->
         reads: [meta, fastq]
         match_barcode: [meta, match_barcode]
-    }.set {ch_samplesheet}
+    }.set {ch_multi}
 
-    //
+
     // MODULE: Run FastQC
-    //
     if (params.run_fastqc) {
         FASTQC (
-            ch_samplesheet.reads
+            ch_multi.reads
         )
         ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
         ch_versions = ch_versions.mix(FASTQC.out.versions.first())

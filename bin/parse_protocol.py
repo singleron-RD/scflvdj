@@ -1,3 +1,4 @@
+import abc
 import itertools
 import json
 import os
@@ -161,8 +162,7 @@ def get_protocol_dict(assets_dir):
     protocol_dict. Key: protocol name, value: protocol dict
 
     >>> protocol_dict = get_protocol_dict("./assets/")
-    >>> protocol_dict["GEXSCOPE-MicroBead"]["pattern_dict"]
-    {'C': [slice(0, 12, None)], 'U': [slice(12, 20, None)]}
+    >>> assert (len(protocol_dict) > 0)
     """
     json_file = os.path.join(assets_dir, "protocols.json")
     protocol_dict = json.load(open(json_file))
@@ -183,9 +183,6 @@ def get_protocol_dict(assets_dir):
 class Auto:
     """
     Auto detect singleron protocols from R1-read
-    GEXSCOPE-MicroBead
-    GEXSCOPE-V1
-    GEXSCOPE-V2
     """
 
     def __init__(self, fq1_list, sample, assets_dir="assets/", max_read=10000):
@@ -201,16 +198,15 @@ class Auto:
         self.sample = sample
         self.protocol_dict = get_protocol_dict(assets_dir)
         self.mismatch_dict = {}
+        self.logger = logger
         for protocol in self.protocol_dict:
             if "bc" in self.protocol_dict[protocol]:
                 self.mismatch_dict[protocol] = get_raw_mismatch(self.protocol_dict[protocol]["bc"], 1)
 
     def run(self):
-        protocol = self.get_protocol()
-        return protocol, self.protocol_dict[protocol]
-
-    def get_protocol(self):
-        """check protocol in the fq1_list"""
+        """
+        Returns protocol: str
+        """
         fq_protocol = {}
         for fastq1 in self.fq1_list:
             protocol = self.get_fq_protocol(fastq1)
@@ -227,36 +223,11 @@ class Auto:
         valid, _corrected, _res = check_seq_mismatch(bc_list, raw_list, mismatch_list)
         return valid
 
+    @abc.abstractmethod
     def seq_protocol(self, seq):
         """
         Returns: protocol or None
-
-        >>> import tempfile
-        >>> runner = Auto([], "fake_sample")
-        >>> seq = "TCGACTGTC" + "ATCCACGTGCTTGAGA" + "TTCTAGGAT" + "TCAGCATGCGGCTACG" + "TGCACGAGA" + "C" + "CATATCAATGGG" + "TTTTTTTTTT"
-        >>> runner.seq_protocol(seq)
-        'GEXSCOPE-V2'
-        >>> seq = "NCAGATTC" + "TCGGTGACAGCCATAT" + "GTACGCAA" + "CGTAGTCAGAAGCTGA" + "CTGAGCCA" + "C" + "TCCGAAGCCCAT" + "TTTTTTTTTT"
-        >>> runner.seq_protocol(seq)
-        'GEXSCOPE-V1'
-        >>> seq = "NCAGATTC" + "TCGGTGACAGCCATAT" + "GTACGCAA" + "CGTAGTCAGAAGCTGA" + "CTGAGCCA"  + "TCCGAAGCC" + "CTGTCT"
-        >>> runner.seq_protocol(seq)
-        'GEXSCOPE-V1'
-        >>> seq = "NCAGATTC" + "TCGGTGACAGCCATAT" + "GTACGCAA" + "CGTAGTCAGAAGCTGA" + "CTGAGCCA"  + "TCCGAAGCC"
-        >>> runner.seq_protocol(seq)
-        'GEXSCOPE-V1'
-        >>> seq = "ATCGATCGATCG" + "ATCGATCG" + "C" + "TTTTTTTTTT"
-        >>> runner.seq_protocol(seq)
-        'GEXSCOPE-MicroBead'
         """
-
-        for protocol in ["GEXSCOPE-V2", "GEXSCOPE-V1"]:
-            if self.is_protocol(seq, protocol):
-                return protocol
-
-        # check if it is MicroBead
-        if seq[16:20] != "TTTT" and seq[22:26] == "TTTT":
-            return "GEXSCOPE-MicroBead"
 
     def get_fq_protocol(self, fq1):
         results = defaultdict(int)
