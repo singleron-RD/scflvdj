@@ -111,6 +111,10 @@ pip install nf-core
 nf-core launch singleron-RD/scflvdj
 ```
 
+### IMGT reference
+
+`imgt_name` Commonly used names are `Homo_sapiens` and `Mus_musculus`. The available species name can be found on [IMGT FTP](https://www.imgt.org//download/V-QUEST/IMGT_V-QUEST_reference_directory/).
+
 ### Running the pipeline with test data
 
 This pipeline contains a small test data. The test config file can be found [here](../conf/test.config).

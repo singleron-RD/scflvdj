@@ -46,16 +46,20 @@
                 }
             }
         },
-        "optional_module": {
-            "title": "Optional module",
+        "imgt": {
+            "title": "IMGT",
             "type": "object",
             "description": "",
             "default": "",
             "properties": {
-                "run_fastqc": {
-                    "type": "boolean"
+                "imgt_name": {
+                    "type": "string",
+                    "description": "Commonly used names are `Homo_sapiens` and `Mus_musculus`. The available species name can be found on [IMGT FTP](https://www.imgt.org//download/V-QUEST/IMGT_V-QUEST_reference_directory/)"
                 }
-            }
+            },
+            "required": [
+                "imgt_name"
+            ]
         },
         "protocol_options": {
             "title": "Protocol options",
@@ -69,8 +73,18 @@
                     "enum": [
                         "GEXSCOPE-FLVDJ-V1"
                     ],
-                    "description": "Predefined pattern and whitelist. Can auto detect GEXSCOPE protocols.",
-                    "help_text": "If set to \"new\", --pattern and --whitelist are required. The default is to auto-detect the protocol when running GEXSCOPE. "
+                    "description": "Predefined pattern and whitelist. Currently only support GEXSCOPE-FLVDJ-V1"
+                }
+            }
+        },
+        "optional_module": {
+            "title": "Optional module",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "run_fastqc": {
+                    "type": "boolean"
                 }
             }
         },
@@ -281,10 +295,13 @@
             "$ref": "#/definitions/input_output_options"
         },
         {
-            "$ref": "#/definitions/optional_module"
+            "$ref": "#/definitions/imgt"
         },
         {
             "$ref": "#/definitions/protocol_options"
+        },
+        {
+            "$ref": "#/definitions/optional_module"
         },
         {
             "$ref": "#/definitions/max_job_request_options"
@@ -295,10 +312,5 @@
         {
             "$ref": "#/definitions/generic_options"
         }
-    ],
-    "properties": {
-        "imgt_name": {
-            "type": "string"
-        }
-    }
+    ]
 }

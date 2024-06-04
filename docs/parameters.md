@@ -13,13 +13,13 @@ Define where the pipeline should find input data and save output data.
 | `email` | Email address for completion summary. <details><summary>Help</summary><small>Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.</small></details>| `string` |  |  |  |
 | `multiqc_title` | MultiQC report title. Printed as page header, used for filename if not otherwise specified. | `string` |  |  |  |
 
-## Optional module
+## IMGT
 
 
 
 | Parameter | Description | Type | Default | Required | Hidden |
 |-----------|-----------|-----------|-----------|-----------|-----------|
-| `run_fastqc` |  | `boolean` |  |  |  |
+| `imgt_name` | Commonly used names are `Homo_sapiens` and `Mus_musculus`. The available species name can be found on [IMGT FTP](https://www.imgt.org//download/V-QUEST/IMGT_V-QUEST_reference_directory/) | `string` |  | True |  |
 
 ## Protocol options
 
@@ -27,7 +27,15 @@ Define where the pipeline should find input data and save output data.
 
 | Parameter | Description | Type | Default | Required | Hidden |
 |-----------|-----------|-----------|-----------|-----------|-----------|
-| `protocol` | Predefined pattern and whitelist. Can auto detect GEXSCOPE protocols. <details><summary>Help</summary><small>If set to "new", --pattern and --whitelist are required. The default is to auto-detect the protocol when running GEXSCOPE. </small></details>| `string` | GEXSCOPE-FLVDJ-V1 |  |  |
+| `protocol` | Predefined pattern and whitelist. Currently only support GEXSCOPE-FLVDJ-V1 | `string` | GEXSCOPE-FLVDJ-V1 |  |  |
+
+## Optional module
+
+
+
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `run_fastqc` |  | `boolean` |  |  |  |
 
 ## Max job request options
 
@@ -73,9 +81,3 @@ Less common options for the pipeline, typically set in a config file.
 | `validationShowHiddenParams` | Show all params when using `--help` <details><summary>Help</summary><small>By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters.</small></details>| `boolean` |  |  | True |
 | `validationFailUnrecognisedParams` | Validation of parameters fails when an unrecognised parameter is found. <details><summary>Help</summary><small>By default, when an unrecognised parameter is found, it returns a warinig.</small></details>| `boolean` |  |  | True |
 | `validationLenientMode` | Validation of parameters in lenient more. <details><summary>Help</summary><small>Allows string values that are parseable as numbers or booleans. For further information see [JSONSchema docs](https://github.com/everit-org/json-schema#lenient-mode).</small></details>| `boolean` |  |  | True |
-
-## Other parameters
-
-| Parameter | Description | Type | Default | Required | Hidden |
-|-----------|-----------|-----------|-----------|-----------|-----------|
-| `imgt_name` |  | `string` |  |  |  |
