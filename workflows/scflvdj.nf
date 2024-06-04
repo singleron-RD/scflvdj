@@ -6,8 +6,10 @@
 
 include { FASTQC                 } from '../modules/nf-core/fastqc/main'
 
-include { EXTRACT           } from '../modules/local/extract'
+include { EXTRACT                } from '../modules/local/extract'
 include { MULTIQC                } from '../modules/local/multiqc_sgr'
+include { IMGT_DOWNLOAD          } from '../modules/local/imgt_download'
+include { TRUST4                 } from '../modules/local/trust4'
 
 include { paramsSummaryMap       } from 'plugin/nf-validation'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -55,7 +57,24 @@ workflow scflvdj {
     ch_versions = ch_versions.mix(EXTRACT.out.versions.first())
     ch_multiqc_files = ch_multiqc_files.mix(EXTRACT.out.json.collect{it[1]})
 
+    // ref
+    def imgt_name = params.imgt_name
+    if (imgt_name == 'Homo_sapiens' || imgt_name == 'Mus_musculus') {
+        ch_ref = "${projectDir}/assets/imgt_ref/${imgt_name}_IMGT+C.fa"
+    } else {
+        IMGT_DOWNLOAD ( 
+            params.imgt_name,
+        )
+        ch_versions = ch_versions.mix(IMGT_DOWNLOAD.out.versions.first())
+        ch_ref = IMGT_DOWNLOAD.out.ref
+    }
 
+    // trust4
+    TRUST4 (
+        EXTRACT.out.out_reads,
+        ch_ref,
+    )
+    ch_versions = ch_versions.mix(TRUST4.out.versions.first())
 
     //
     // Collate and save software versions

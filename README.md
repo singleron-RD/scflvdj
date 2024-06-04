@@ -1,6 +1,6 @@
 ## Introduction
 
-**singleron-RD/scflvdj** is a bioinformatics pipeline to detect variants in single-cell amplicon data.
+**singleron-RD/scflvdj** is a bioinformatics pipeline to analyze single cell TCR and BCR data.
 
 ## Documents
 

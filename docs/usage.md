@@ -16,7 +16,7 @@ You will need to create a samplesheet with information about the samples you wou
 | `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
 | `fastq_1` | Full path to FastQ file reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                                |
 | `fastq_2` | Full path to FastQ file reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                                |
-| `match_barcode`| Full path to matched scRNA-Seq barcode.tsv.gz file. 
+| `match_barcode`| (Optional)Full path to matched scRNA-Seq barcode.tsv.gz file. 
 
 > [!NOTE]
 > All path must be full path. Relative path are not allowed.
@@ -31,7 +31,7 @@ When you have many samples, manually creating `samplesheet.csv` can be tedious a
 
 ```
 pip install sccore
-manifest -m manifest.csv -f /workspaces/scflvdj_test_data/NPM1 --match
+manifest -m manifest.csv -f /workspaces/scflvdj_test_data/mouse_TCR --match
 ```
 
 `-m --manifest` Path to the manifest CSV file containing prefix-sample mapping.
@@ -46,7 +46,7 @@ X,prefixX
 Y,prefixY
 ```
 
-/workspaces/scflvdj_test_data/NPM1
+/workspaces/scflvdj_test_data/mouse_TCR
 ```
 NPM1/
 ├── match_barcode
@@ -70,9 +70,7 @@ The typical command for running the pipeline is as follows:
 nextflow run singleron-RD/scflvdj \
  --input ./samplesheet.csv \
  --outdir ./results \
- --genes BRAF,EGFR,HRAS,KRAS,NRAS,PIK3CA,TP53 \
- --fasta path_to_genome_fasta \
- --star_genome path_to_star_genome_index \
+ --imgt_name Mus_musculus \
  -profile docker 
 ```
 
@@ -102,9 +100,7 @@ with `params.yaml` containing:
 ```yaml
 input: './samplesheet.csv'
 outdir: './results/'
-genes: 'BRAF,EGFR,HRAS,KRAS,NRAS,PIK3CA,TP53'
-fasta: 'path_to_genome_fasta'
-star_genome: 'path_to_star_genome_index'
+imgt_name: 'Mus_musculus'
 <...>
 ```
 
@@ -113,32 +109,6 @@ If you prefer a web-based graphical interface or an interactive command-line wiz
 ```
 pip install nf-core
 nf-core launch singleron-RD/scflvdj
-```
-
-### Target genes
-The target gene is specified using the genes parameter. The gene combinations currently provided by the kit are as follows:
-
-- lung: `BRAF,EGFR,HRAS,KRAS,NRAS,PIK3CA,TP53`
-- blood: `IDH1,IDH2,KRAS,TP53,WT1`
-- Clonal hematopoiesis of indeterminate potential (CHIP): `DNMT3A,TET2,JAK2,TP53,ASXL1`
-  
-### Create genome index
-
-Since indexing is an expensive process in time and resources you should ensure that it is only done once, by retaining the indices generated from each batch of reference files.
-
-When running the data of a certain species for the first time, you can provide `fasta`, `gtf` and `genome_name` instead of `star_genome`. For example,
-
-```yaml
-fasta: "https://raw.githubusercontent.com/singleron-RD/test_genome/master/human.GRCh38.99.MT/human.GRCh38.99.MT.fasta"
-gtf: "https://raw.githubusercontent.com/singleron-RD/test_genome/master/human.GRCh38.99.MT/human.GRCh38.99.MT.gtf"
-genome_name: "human.GRCh38.99.MT"
-```
-
-The STAR index files will be saved in `{outdir}/star_genome/{genome_name}/`.
-When running data from the same genome later, you can provide `star_genome` to skip the indexing:
-
-```yaml
-star_genome: "/workspaces/test/outs/star_genome/human.GRCh38.99.MT/"
 ```
 
 ### Running the pipeline with test data
