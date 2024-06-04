@@ -46,86 +46,6 @@
                 }
             }
         },
-        "target_genes": {
-            "title": "Target genes",
-            "type": "object",
-            "description": "",
-            "default": "",
-            "properties": {
-                "genes": {
-                    "type": "string",
-                    "description": "Target gene names. Multiple gene names are seperated by comma."
-                }
-            },
-            "required": [
-                "genes"
-            ]
-        },
-        "genome": {
-            "title": "Genome",
-            "type": "object",
-            "description": "Genome files and parameters.",
-            "default": "",
-            "fa_icon": "fas fa-address-card",
-            "properties": {
-                "fasta": {
-                    "type": "string",
-                    "format": "file-path",
-                    "description": "Path to genome fasta."
-                },
-                "gtf": {
-                    "type": "string",
-                    "format": "file-path",
-                    "description": "Path to genome gtf."
-                },
-                "star_genome": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "Path to STAR genome directory. Required if fasta and gtf are not provided."
-                },
-                "genome_name": {
-                    "type": "string",
-                    "description": "The generated STAR genome index will be saved under this folder. It can then be used for future pipeline runs, reducing processing times.",
-                    "default": "star_genome"
-                },
-                "keep_attributes": {
-                    "type": "string",
-                    "default": "gene_biotype=protein_coding,lncRNA,antisense,IG_LV_gene,IG_V_gene,IG_V_pseudogene,IG_D_gene,IG_J_gene,IG_J_pseudogene,IG_C_gene,IG_C_pseudogene,TR_V_gene,TR_V_pseudogene,TR_D_gene,TR_J_gene,TR_J_pseudogene,TR_C_gene;",
-                    "description": "Attributes in gtf to keep."
-                },
-                "star_genome_additional_args": {
-                    "type": "string",
-                    "description": "Additional args to use when generate STAR genome directory."
-                },
-                "snpeff_genome": {
-                    "type": "string",
-                    "default": "GRCh38"
-                },
-                "snpeff_cache_version": {
-                    "type": "string",
-                    "default": "mane.1.0.ensembl"
-                }
-            },
-            "required": [
-                "fasta"
-            ]
-        },
-        "variant_args": {
-            "title": "Variant args",
-            "type": "object",
-            "description": "",
-            "default": "",
-            "properties": {
-                "freebayes_args": {
-                    "type": "string",
-                    "default": "--use-best-n-alleles 2 --limit-coverage 100  --prob-contamination 0.05 --min-alternate-fraction 0.2 --min-supporting-allele-qsum 10000"
-                },
-                "bcftools_filter_args": {
-                    "type": "string",
-                    "default": "-e \"QUAL<1000 || AF<0.05\" -Oz"
-                }
-            }
-        },
         "optional_module": {
             "title": "Optional module",
             "type": "object",
@@ -147,23 +67,10 @@
                     "type": "string",
                     "default": "auto",
                     "enum": [
-                        "auto",
-                        "GEXSCOPE-MicroBead",
-                        "GEXSCOPE-V1",
-                        "GEXSCOPE-V2",
-                        "new"
+                        "GEXSCOPE-FLVDJ-V1"
                     ],
                     "description": "Predefined pattern and whitelist. Can auto detect GEXSCOPE protocols.",
                     "help_text": "If set to \"new\", --pattern and --whitelist are required. The default is to auto-detect the protocol when running GEXSCOPE. "
-                },
-                "pattern": {
-                    "type": "string",
-                    "help_text": "C: cell barcode\nL: Linker sequence between segments\nU: UMI\nT: poly T",
-                    "description": "A string to locate cell barcode and UMI in R1 read. For example \"C9L16C9L16C9L1U12\"."
-                },
-                "whitelist": {
-                    "type": "string",
-                    "description": "Barcode whitelist files. Multiple whitelists are seperated by whitespace."
                 }
             }
         },
@@ -372,15 +279,6 @@
     "allOf": [
         {
             "$ref": "#/definitions/input_output_options"
-        },
-        {
-            "$ref": "#/definitions/target_genes"
-        },
-        {
-            "$ref": "#/definitions/genome"
-        },
-        {
-            "$ref": "#/definitions/variant_args"
         },
         {
             "$ref": "#/definitions/optional_module"

@@ -35,6 +35,6 @@
         "errorMessage": "Matched scRNA-Seq cell barcode file path."
       }
     },
-    "required": ["sample", "fastq_1", "fastq_2", "match_barcode"]
+    "required": ["sample", "fastq_1", "fastq_2"]
   }
 }

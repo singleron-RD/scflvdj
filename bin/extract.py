@@ -5,8 +5,7 @@ import argparse
 import parse_protocol
 import pyfastx
 import utils
-
-ASSAY = "scatac"
+from __init__ import ASSAY
 
 
 class Auto(parse_protocol.Auto):
@@ -33,20 +32,15 @@ if __name__ == "__main__":
     parser.add_argument("--sample", required=True)
     parser.add_argument("--fq1", required=True)
     parser.add_argument("--fq2", required=True)
-    parser.add_argument("--fq3", required=True)
     parser.add_argument("--assets_dir", required=True)
     parser.add_argument("--protocol", required=True)
     args = parser.parse_args()
 
     fq1_list = args.fq1.split(",")
     fq2_list = args.fq2.split(",")
-    fq3_list = args.fq3.split(",")
     # protocol
     protocol_dict = parse_protocol.get_protocol_dict(args.assets_dir)
-    if args.protocol == "auto":
-        p = Auto(fq1_list, args.sample).run()
-    else:
-        p = args.protocol
+    p = args.protocol
 
     fn = f"{args.sample}.{ASSAY}.protocol.stats.json"
     utils.write_json({"Protocol": p}, fn)
@@ -68,7 +62,8 @@ if __name__ == "__main__":
 
         for (name1, seq1, qual1), (name2, seq2, qual2) in zip(fq1, fq2):
             raw_reads += 1
-            bc_list = [seq2[x] for x in pattern_dict["C"]]
+            bc_list = [utils.rev_compl(seq1[x]) for x in pattern_dict["C"]][::-1]
+            print(bc_list)
             valid, corrected, corrected_seq = parse_protocol.check_seq_mismatch(bc_list, raw_list, mismatch_list)
             if valid:
                 valid_reads += 1
