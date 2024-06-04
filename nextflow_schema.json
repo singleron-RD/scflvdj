@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "https://raw.githubusercontent.com/singleron-RD/scflvdj/master/nextflow_schema.json",
     "title": "singleron-RD/scflvdj pipeline parameters",
-    "description": "single cell RNASeq nextflow pipeline",
+    "description": "nextflow pipeline",
     "type": "object",
     "definitions": {
         "input_output_options": {
@@ -65,7 +65,7 @@
             "properties": {
                 "protocol": {
                     "type": "string",
-                    "default": "auto",
+                    "default": "GEXSCOPE-FLVDJ-V1",
                     "enum": [
                         "GEXSCOPE-FLVDJ-V1"
                     ],
@@ -295,5 +295,10 @@
         {
             "$ref": "#/definitions/generic_options"
         }
-    ]
+    ],
+    "properties": {
+        "imgt_name": {
+            "type": "string"
+        }
+    }
 }
