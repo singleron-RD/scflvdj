@@ -65,7 +65,7 @@ def get_vdj_metric(df, chains, pairs):
     """
     data_dict = {}
     fl_pro_pair_df = pd.DataFrame(df[df['productive']==True].barcode.value_counts())
-    fl_pro_pair_df = fl_pro_pair_df[fl_pro_pair_df['barcode']>=2]
+    fl_pro_pair_df = fl_pro_pair_df[fl_pro_pair_df['count']>=2]
     cell_nums = len(set(df['barcode']))
     
     data_dict = {

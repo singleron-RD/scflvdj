@@ -25,8 +25,7 @@ process SUMMARIZE {
     path "${meta.id}_filtered_contig.fasta", emit: filter_contig_fa
     
     script:
-    // separate forward from reverse pairs
-    def (r1, r2) = reads.collate(2).transpose()
+
     """
     summarize.py \\
         --sample ${meta.id} \\
