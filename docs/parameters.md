@@ -29,6 +29,14 @@ Define where the pipeline should find input data and save output data.
 |-----------|-----------|-----------|-----------|-----------|-----------|
 | `protocol` | Predefined pattern and whitelist. Currently only support GEXSCOPE-FLVDJ-V1 | `string` | GEXSCOPE-FLVDJ-V1 |  |  |
 
+## SUMMARIZE
+
+
+
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `seqtype` | The available name are `BCR` or `TCR`. | `string` |  | True |  |
+
 ## Optional module
 
 

@@ -2,7 +2,7 @@ process EXTRACT {
     tag "$meta.id"
     label 'process_single'
 
-    conda 'bioconda::   '
+    conda 'bioconda::pyfastx=2.1.0'
     container "biocontainers/pyfastx:2.1.0--py39h3d4b85c_0"
 
     input:
