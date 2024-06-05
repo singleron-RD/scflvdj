@@ -33,7 +33,7 @@ process TRUST4 {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def readformat = task.ext.readformat ?: "bc:0:23,um:24:-1"
+    def readformat = task.ext.readformat ?: "bc:0:25,um:26:-1"
     def run_trust4_cmd = "-u ${r2} --barcode ${r1} --UMI ${r1} --outputReadAssignment"
     """
 

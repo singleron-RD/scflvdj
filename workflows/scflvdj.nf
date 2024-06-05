@@ -10,7 +10,7 @@ include { EXTRACT                } from '../modules/local/extract'
 include { MULTIQC                } from '../modules/local/multiqc_sgr'
 include { IMGT_DOWNLOAD          } from '../modules/local/imgt_download'
 include { TRUST4                 } from '../modules/local/trust4'
-
+include { SUMMARIZE              } from '../modules/local/summarize/summarize'
 include { paramsSummaryMap       } from 'plugin/nf-validation'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -75,6 +75,24 @@ workflow scflvdj {
         ch_ref,
     )
     ch_versions = ch_versions.mix(TRUST4.out.versions.first())
+
+    // SUMMARIZE
+    if (params.seqtype == 'BCR' ) {
+        barcode_report = TRUST4.out.barcode_report_b
+    } else {
+        barcode_report = TRUST4.out.barcode_report_t
+    }
+    SUMMARIZE (
+        EXTRACT.out.out_reads,
+        params.seqtype,
+        params.coef,
+        params.expected_target_cell_num,
+        TRUST4.out.assembled_reads,
+        TRUST4.out.filter_report_tsv,
+        TRUST4.out.annot_fa,
+        barcode_report
+    )
+    ch_multiqc_files = ch_multiqc_files.mix(SUMMARIZE.out.json.collect{it[1]})
 
     //
     // Collate and save software versions

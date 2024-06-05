@@ -89,3 +89,11 @@ def add_log(func):
 
     wrapper.logger = logger
     return wrapper
+
+
+def format_value(value, total=None):
+    display = str(value)
+    if total:
+        fraction = round(value / total * 100, 2)
+        display += f'({fraction}%)'
+    return display
