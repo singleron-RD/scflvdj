@@ -69,7 +69,7 @@ def get_vdj_metric(df, chains, pairs):
     cell_nums = len(set(df['barcode']))
     
     data_dict = {
-        'Cells With Productive V-J Spanning Pair': utils.format_value(fl_pro_pair_df.shape[0], cell_nums)
+        'Cells With Productive V-J Spanning Pair': utils.get_frac(fl_pro_pair_df.shape[0]/cell_nums)
     }
 
     for pair in pairs:
@@ -79,28 +79,28 @@ def get_vdj_metric(df, chains, pairs):
         paired_cbs = len(cbs1.intersection(cbs2))
 
         data_dict.update({
-            f'Cells With Productive V-J Spanning ({chain1}, {chain2}) Pair': utils.format_value(paired_cbs, cell_nums)
+            f'Cells With Productive V-J Spanning ({chain1}, {chain2}) Pair': utils.get_frac(paired_cbs/cell_nums)
         })
 
     for chain in chains:
         value = len(set(df[df['chain']==chain].barcode))
         data_dict.update({
-            f'Cells With {chain} Contig': utils.format_value(value, cell_nums)
+            f'Cells With {chain} Contig': utils.get_frac(value/cell_nums)
         })
 
         value = len(set(df[(df['chain']==chain)&(df['cdr3']!=None)].barcode))
         data_dict.update({
-            f'Cells With CDR3-annotated {chain} Contig': utils.format_value(value, cell_nums)
+            f'Cells With CDR3-annotated {chain} Contig': utils.get_frac(value/cell_nums)
         })
         
         value = len(set(df[(df['full_length']==True)&(df['chain']==chain)].barcode))
         data_dict.update({
-            f'Cells With V-J Spanning {chain} Contig': utils.format_value(value, cell_nums)
+            f'Cells With V-J Spanning {chain} Contig': utils.get_frac(value/cell_nums)
         })
 
         value = len(set(df[(df['full_length']==True)&(df['productive']==True)&(df['chain']==chain)].barcode))
         data_dict.update({
-            f'Cells With Productive {chain} Contig': utils.format_value(value, cell_nums)
+            f'Cells With Productive {chain} Contig': utils.get_frac(value/cell_nums)
         })
 
     return data_dict
@@ -321,7 +321,7 @@ def gen_summary(sample, fq2, assembled_reads, seqtype, df_for_clono):
         "Estimated Number of Cells": total_cells,
         "Mean Read Pairs per Cell": int(read_count/total_cells),
         "Mean Used Read Pairs per Cell": int(used_read/total_cells),
-        "Fraction of Reads in Cells": utils.format_value(used_read, read_count_all),
+        "Fraction of Reads in Cells": utils.get_frac(used_read/read_count_all),
     }
 
     for c in chains:

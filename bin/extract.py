@@ -69,12 +69,11 @@ if __name__ == "__main__":
                 valid_reads += 1
                 if corrected:
                     corrected_reads += 1
-                read_name = f"{corrected_seq}:{raw_reads}"
                 umi = parse_protocol.get_seq_str(seq1, pattern_dict["U"])
-                qual_umi = parse_protocol.get_seq_str(qual1, pattern_dict["U"])
-                qual_bc = parse_protocol.get_seq_str(qual1, pattern_dict["C"])
-                bc = corrected_seq.replace("_", "")
-                outdict[1].write(utils.fastq_str(read_name, bc + umi, qual_bc + qual_umi))
+                bc = corrected_seq
+                read_name = f"{bc}:{umi}:{raw_reads}"
+                qual1 = 'F' * len(bc + umi)
+                outdict[1].write(utils.fastq_str(read_name, bc + umi, qual1))
                 outdict[2].write(utils.fastq_str(read_name, seq2, qual2))
 
     fn = f"{args.sample}.{ASSAY}.extract.stats.json"
