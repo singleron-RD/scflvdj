@@ -6,6 +6,7 @@ import parse_protocol
 import pyfastx
 import utils
 from __init__ import ASSAY
+from collections import Counter
 
 
 class Auto(parse_protocol.Auto):
@@ -56,6 +57,7 @@ if __name__ == "__main__":
     raw_reads = 0
     valid_reads = 0
     corrected_reads = 0
+    barcode_read_Counter = Counter()
     for fq1, fq2 in zip(fq1_list, fq2_list):
         fq1 = pyfastx.Fastx(fq1)
         fq2 = pyfastx.Fastx(fq2)
@@ -73,8 +75,10 @@ if __name__ == "__main__":
                 bc = corrected_seq
                 read_name = f"{bc}:{umi}:{raw_reads}"
                 qual1 = 'F' * len(bc + umi)
-                outdict[1].write(utils.fastq_str(read_name, bc + umi, qual1))
-                outdict[2].write(utils.fastq_str(read_name, seq2, qual2))
+                barcode_read_Counter.update(bc)
+                if barcode_read_Counter[cb] <= 40000:
+                    outdict[1].write(utils.fastq_str(read_name, bc + umi, qual1))
+                    outdict[2].write(utils.fastq_str(read_name, seq2, qual2))
 
     fn = f"{args.sample}.{ASSAY}.extract.stats.json"
     metrics = {"Raw Reads": raw_reads}
