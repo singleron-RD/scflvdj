@@ -95,5 +95,5 @@ def format_value(value, total=None):
     display = str(value)
     if total:
         fraction = round(value / total * 100, 2)
-        display += f'({fraction}%)'
+        display += f"({fraction}%)"
     return display

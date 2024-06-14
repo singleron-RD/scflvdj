@@ -18,6 +18,6 @@ def multiqc_sgr_config():
         "scsnp/count": {"fn": "*scsnp.count.json"},
         "scsnp/meta": {"fn": "*scsnp.meta.json"},
         "scflvdj/stats": {"fn": "*scflvdj.*stats.json"},
-        "scflvdj/umi_count": {"fn": "*flvdj.umi_count.json"},
+        "scflvdj/umi_count": {"fn": "*scflvdj.umi_count.json"},
     }
     config.update_dict(config.sp, sgr_search_patterns)

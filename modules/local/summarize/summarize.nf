@@ -41,7 +41,7 @@ process SUMMARIZE {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        pandas: \$(pandas --version | sed -e "s/pandas version //g")
+        pandas: \$( python -c "import pandas;print(pandas.__version__)")
     END_VERSIONS
     """
 }

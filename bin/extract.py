@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 import argparse
+from collections import Counter
 
 import parse_protocol
 import pyfastx
 import utils
 from __init__ import ASSAY
-from collections import Counter
 
 
 class Auto(parse_protocol.Auto):
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     raw_reads = 0
     valid_reads = 0
     corrected_reads = 0
-    barcode_read_Counter = Counter()
+    barcode_read_counter = Counter()
     for fq1, fq2 in zip(fq1_list, fq2_list):
         fq1 = pyfastx.Fastx(fq1)
         fq2 = pyfastx.Fastx(fq2)
@@ -74,9 +74,9 @@ if __name__ == "__main__":
                 umi = parse_protocol.get_seq_str(seq1, pattern_dict["U"])
                 bc = corrected_seq
                 read_name = f"{bc}:{umi}:{raw_reads}"
-                qual1 = 'F' * len(bc + umi)
-                barcode_read_Counter.update(bc)
-                if barcode_read_Counter[bc] <= 40000:
+                qual1 = "F" * len(bc + umi)
+                barcode_read_counter.update(bc)
+                if barcode_read_counter[bc] <= 40000:
                     outdict[1].write(utils.fastq_str(read_name, bc + umi, qual1))
                     outdict[2].write(utils.fastq_str(read_name, seq2, qual2))
 
