@@ -76,7 +76,7 @@ if __name__ == "__main__":
                 read_name = f"{bc}:{umi}:{raw_reads}"
                 qual1 = 'F' * len(bc + umi)
                 barcode_read_Counter.update(bc)
-                if barcode_read_Counter[cb] <= 40000:
+                if barcode_read_Counter[bc] <= 40000:
                     outdict[1].write(utils.fastq_str(read_name, bc + umi, qual1))
                     outdict[2].write(utils.fastq_str(read_name, seq2, qual2))
 
