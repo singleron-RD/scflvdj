@@ -52,7 +52,7 @@ process TRUST4 {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        trust4: \$(run-trust4 2>&1 | grep -o 'v[0-9.]*-r[0-9]*' | sed 's/^/TRUST4 using /' )
+        trust4: \$(run-trust4 2>&1 | grep -o 'v[0-9.]*-r[0-9]*' | sed 's/^TRUST4//' )
     END_VERSIONS
     """
 }
