@@ -11,6 +11,7 @@ include { MULTIQC                } from '../modules/local/multiqc_sgr'
 include { IMGT_DOWNLOAD          } from '../modules/local/imgt_download'
 include { TRUST4                 } from '../modules/local/trust4'
 include { SUMMARIZE              } from '../modules/local/summarize/summarize'
+include { MATCH                  } from '../modules/local/match/match'
 include { paramsSummaryMap       } from 'plugin/nf-validation'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -91,6 +92,15 @@ workflow scflvdj {
         TRUST4.out.filter_report_tsv,
         TRUST4.out.annot_fa,
         barcode_report
+    )
+    ch_multiqc_files = ch_multiqc_files.mix(SUMMARIZE.out.json.collect{it[1]})
+
+    // Match
+    MATCH (
+        ch_multi.match_barcode,
+        params.seqtype,
+        SUMMARIZE.out.filter_contig_csv,
+        SUMMARIZE.out.filter_contig_fa
     )
     ch_multiqc_files = ch_multiqc_files.mix(SUMMARIZE.out.json.collect{it[1]})
 
