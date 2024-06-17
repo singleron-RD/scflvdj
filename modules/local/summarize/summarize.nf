@@ -18,7 +18,7 @@ process SUMMARIZE {
     output:
     tuple val(meta), path("*.json"), emit: json
     path "${meta.id}.count.txt", emit: umi_count_txt
-    path "clonotypes.csv", emit: clonotype
+    path "${meta.id}_clonotypes.csv", emit: clonotype
     path "${meta.id}_all_contig.csv", emit: all_contig_csv
     path "${meta.id}_filtered_contig.csv", emit: filter_contig_csv
     path "${meta.id}_all_contig.fasta", emit: all_contig_fa
