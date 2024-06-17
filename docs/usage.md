@@ -19,7 +19,7 @@ You will need to create a samplesheet with information about the samples you wou
 | `match_barcode`| (Optional)Full path to matched scRNA-Seq barcode.tsv.gz file. 
 
 > [!NOTE]
-> All path must be full path. Relative path are not allowed.
+> fastq File has to be gzipped and have the extension ".fastq.gz" or ".fq. Must use absolute path and relative path are not allowed.
 
 ### Multiple runs of the same sample
 
@@ -27,7 +27,7 @@ The `sample` identifiers have to be the same when you have re-sequenced the same
 
 ### Create `samplesheet.csv` using helper script
 
-When you have many samples, manually creating `samplesheet.csv` can be tedious and error-prone. There is a python script [manifest.py](https://github.com/singleron-RD/sccore/blob/main/sccore/cli/manifest.py) that can help you create a `samplesheet.csv` file.
+When you have many samples, manually creating `samplesheet.csv` can be tedious and error-prone. There is a python script [manifest.py](https://github.com/singleron-RD/sccore/blob/main/sccore/cli/manifest.py) that can help you create a `samplesheet.csv` file. This script will recursively search the specified folders for fastq files and (optional) matched barcode files.
 
 ```
 pip install sccore
@@ -48,7 +48,7 @@ Y,prefixY
 
 /workspaces/scflvdj_test_data/mouse_TCR
 ```
-NPM1/
+mouse_TCR/
 ├── match_barcode
 │   ├── X.matrix
 │   │   └── barcodes.tsv.gz
@@ -71,6 +71,7 @@ nextflow run singleron-RD/scflvdj \
  --input ./samplesheet.csv \
  --outdir ./results \
  --imgt_name Mus_musculus \
+ --seqtype TCR \
  -profile docker 
 ```
 
@@ -101,6 +102,7 @@ with `params.yaml` containing:
 input: './samplesheet.csv'
 outdir: './results/'
 imgt_name: 'Mus_musculus'
+seqtype: 'TCR'
 <...>
 ```
 
@@ -131,6 +133,12 @@ When you run the above command, Nextflow automatically pulls the pipeline code f
 ```bash
 nextflow pull singleron-RD/scflvdj
 ```
+> [!NOTE]
+> This command might fail if you have trouble connecting to github. In this case, you can manually git clone the master branch and run with the path to the folder.
+> ```
+> git clone https://github.com/singleron-RD/scflvdj.git
+> nextflow run /workspace/pipeline/scflvdj ...
+> ```
 
 ### Reproducibility
 
