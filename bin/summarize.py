@@ -274,7 +274,7 @@ def parse_clonotypes(sample, df, df_for_clono, cell_barcodes, filtered_contig):
     df_for_clono_pro["chain_cdr3nt"] = df_for_clono_pro.loc[:, ["chain", "cdr3_nt"]].apply(":".join, axis=1)
 
     cbs = set(df_for_clono_pro["barcode"])
-    clonotypes = open("clonotypes.csv", "w")
+    clonotypes = open(f"{sample}_clonotypes.csv", "w")
     clonotypes.write("barcode\tcdr3s_aa\tcdr3s_nt\n")
     for cb in cbs:
         temp = df_for_clono_pro[df_for_clono_pro["barcode"] == cb]
@@ -284,7 +284,7 @@ def parse_clonotypes(sample, df, df_for_clono, cell_barcodes, filtered_contig):
         clonotypes.write(f"{cb}\t{aa_chain}\t{nt_chain}\n")
     clonotypes.close()
 
-    df_clonotypes = pd.read_csv("clonotypes.csv", sep="\t", index_col=None)
+    df_clonotypes = pd.read_csv(f"{sample}_clonotypes.csv", sep="\t", index_col=None)
     contig_with_clonotype = copy.deepcopy(df_clonotypes)
     df_dict = df_clonotypes[["cdr3s_nt", "cdr3s_aa"]].set_index("cdr3s_nt").to_dict(orient="dict")["cdr3s_aa"]
     df_clonotypes = df_clonotypes.groupby("cdr3s_nt", as_index=False).agg({"barcode": "count"})
@@ -296,7 +296,7 @@ def parse_clonotypes(sample, df, df_for_clono, cell_barcodes, filtered_contig):
     df_clonotypes["clonotype_id"] = [f"clonotype{i}" for i in range(1, df_clonotypes.shape[0] + 1)]
     df_clonotypes["cdr3s_aa"] = df_clonotypes["cdr3s_nt"].apply(lambda x: df_dict[x])
     df_clonotypes = df_clonotypes.reindex(columns=["clonotype_id", "frequency", "proportion", "cdr3s_aa", "cdr3s_nt"])
-    df_clonotypes.to_csv("clonotypes.csv", sep=",", index=False)
+    df_clonotypes.to_csv(f"{sample}_clonotypes.csv", sep=",", index=False)
     used_for_merge = df_clonotypes[["cdr3s_nt", "clonotype_id"]]
 
     df_merge = pd.merge(used_for_merge, contig_with_clonotype, on="cdr3s_nt", how="outer")
