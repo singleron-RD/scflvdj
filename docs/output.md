@@ -6,7 +6,6 @@
   - [summarize](#summarize)
   - [multiqc-sgr](#multiqc-sgr)
   - [pipeline\_info](#pipeline_info)
-  - [fastqc](#fastqc)
 
 # Main output
 
@@ -45,8 +44,8 @@ TRUST4 performs de novo assembly on V, J, C genes including the hypervariable co
 - `{sample}_report.tsv` Record CDR3 types, read count and proportion.
 - `{sample}_filter_report.tsv` Filter non-functional CDR3 result.
 - `{sample}_barcode_report.tsv` Record chain information for each barcode.
-- `{sample}_barcode_airr.tsv` Barcode report in AIRR format.
-- `{sample}_airr.tsv` Annotation in AIRR format(https://docs.airr-community.org/en/latest/datarep/rearrangements.html).
+- `{sample}_barcode_airr.tsv` Barcode report in [AIRR format](https://docs.airr-community.org/en/latest/datarep/rearrangements.html).
+- `{sample}_airr.tsv` Annotation in [AIRR format](https://docs.airr-community.org/en/latest/datarep/rearrangements.html).
 
 ## summarize
 
