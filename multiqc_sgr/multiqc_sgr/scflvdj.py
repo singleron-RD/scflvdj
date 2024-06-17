@@ -179,6 +179,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With Productive V-J Spanning (IGK, IGH) Pair": {
                 "title": "Cells With Productive V-J Spanning (IGK, IGH) Pair",
@@ -187,6 +188,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With Productive V-J Spanning (IGL, IGH) Pair": {
                 "title": "Cells With Productive V-J Spanning (IGL, IGH) Pair",
@@ -195,6 +197,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With TRA Contig": {
                 "title": "Cells With TRA Contig",
@@ -203,6 +206,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With CDR3-annotated TRA Contig": {
                 "title": "Cells With CDR3-annotated TRA Contig",
@@ -211,6 +215,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With V-J Spanning TRA Contig": {
                 "title": "Cells With V-J Spanning TRA Contig",
@@ -219,6 +224,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With Productive TRA Contig": {
                 "title": "Cells With Productive TRA Contig",
@@ -235,6 +241,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With CDR3-annotated TRB Contig": {
                 "title": "Cells With CDR3-annotated TRB Contig",
@@ -243,6 +250,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With V-J Spanning TRB Contig": {
                 "title": "Cells With V-J Spanning TRB Contig",
@@ -251,6 +259,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With Productive TRB Contig": {
                 "title": "Cells With Productive TRB Contig",
@@ -267,6 +276,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With CDR3-annotated IGH Contig": {
                 "title": "Cells With CDR3-annotated IGH Contig",
@@ -275,6 +285,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With V-J Spanning IGH Contig": {
                 "title": "Cells With V-J Spanning IGH Contig",
@@ -283,6 +294,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With Productive IGH Contig": {
                 "title": "Cells With Productive IGH Contig",
@@ -299,6 +311,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With CDR3-annotated IGL Contig": {
                 "title": "Cells With CDR3-annotated IGL Contig",
@@ -307,6 +320,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With V-J Spanning IGL Contig": {
                 "title": "Cells With V-J Spanning IGL Contig",
@@ -315,6 +329,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With Productive IGL Contig": {
                 "title": "Cells With Productive IGL Contig",
@@ -331,6 +346,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With CDR3-annotated IGK Contig": {
                 "title": "Cells With CDR3-annotated IGK Contig",
@@ -339,6 +355,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With V-J Spanning IGK Contig": {
                 "title": "Cells With V-J Spanning IGK Contig",
@@ -347,6 +364,7 @@ class MultiqcModule(BaseMultiqcModule):
                 "min": 0,
                 "suffix": "%",
                 "scale": "green",
+                "hidden": True,
             },
             "Cells With Productive IGK Contig": {
                 "title": "Cells With Productive IGK Contig",
