@@ -58,6 +58,14 @@ Summarize and filter from trust4 result files.
 - `{sample}_filtered_contig.fasta` Assembled contig sequences after filter.
 - `{sample}_clonotypes.csv` Description for each clonotype.
 
+## match
+
+Match with scRNA-Seq library.
+
+**Output files** 
+- `{sample}_matched_contig.csv` Annotations of each cellular contig matched with scRNA-seq.
+- `{sample}_matched_contig.fasta` Assembled Contig sequences matched with scRNA-seq.
+
 ## multiqc-sgr
 
 [MultiQC](http://multiqc.info) is a visualization tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in the report data directory.
