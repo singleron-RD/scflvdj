@@ -12,6 +12,7 @@ process EXTRACT {
 
     output:
     tuple val(meta), path("${meta.id}_R1.fq.gz"), path("${meta.id}_R2.fq.gz"), emit: out_reads
+    path("temp/${meta.id}temp*.fq.gz"),  emit: out_temp_dir
     tuple val(meta), path("*.json"),  emit: json
     path  "versions.yml" , emit: versions
 
@@ -19,6 +20,8 @@ process EXTRACT {
     // separate forward from reverse pairs
     def (r1,r2) = reads.collate(2).transpose()
     """
+    mkdir temp
+
     extract.py \\
         --sample ${meta.id} \\
         --fq1 ${r1.join( "," )} \\

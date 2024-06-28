@@ -1,12 +1,12 @@
 process TRUST4 {
-    tag "$meta.id"
+    tag "$tmp_sample"
     label 'process_high'
 
     conda "bioconda::trust4=1.1.1"
     container 'biocontainers/trust4:1.1.1--h43eeafb_0'
     
     input:
-    tuple val(meta), path(r1), path(r2)
+    tuple val(tmp_sample), path(tmp_reads)
     path(ref)
 
     output:
@@ -19,8 +19,6 @@ process TRUST4 {
     path("*_assign.out")          , emit: assign_out
     path("*_barcode_report.tsv")  , emit: barcode_report
     path("*_barcode_airr.tsv")    , emit: barcode_airr
-    path("*_b.csv")               , emit: barcode_report_b
-    path("*_t.csv")               , emit: barcode_report_t
     path("*_assembled_reads.fa")  , emit: assembled_reads
     path("*_annot.fa")            , emit: annot_fa
     path("*_airr.tsv")            , emit: airr_tsv
@@ -31,10 +29,11 @@ process TRUST4 {
     task.ext.when == null || task.ext.when
 
     script:
+    def (r1,r2) = tmp_reads.collate(2).transpose()
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${tmp_sample}"
     def readformat = task.ext.readformat ?: "bc:0:25,um:26:-1"
-    def run_trust4_cmd = "-u ${r2} --barcode ${r1} --UMI ${r1} --outputReadAssignment"
+    def run_trust4_cmd = "-u ${r2[0]} --barcode ${r1[0]} --UMI ${r1[0]} --outputReadAssignment"
     """
 
     run-trust4 \\
@@ -47,8 +46,6 @@ process TRUST4 {
         $args
 
     awk '(\$4!~"_") && (\$4!~"?")' ${prefix}_report.tsv > ${prefix}_filter_report.tsv
-    
-    perl ${projectDir}/bin/trust-barcoderep-to-10X.pl ${prefix}_barcode_report.tsv ${prefix}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -10,6 +10,7 @@ include { EXTRACT                } from '../modules/local/extract'
 include { MULTIQC                } from '../modules/local/multiqc_sgr'
 include { IMGT_DOWNLOAD          } from '../modules/local/imgt_download'
 include { TRUST4                 } from '../modules/local/trust4'
+include { MERGE                  } from '../modules/local/merge'
 include { SUMMARIZE              } from '../modules/local/summarize/summarize'
 include { MATCH                  } from '../modules/local/match/match'
 include { paramsSummaryMap       } from 'plugin/nf-validation'
@@ -70,27 +71,39 @@ workflow scflvdj {
         ch_ref = IMGT_DOWNLOAD.out.ref
     }
 
+    EXTRACT.out.out_temp_dir.flatten()
+    .map { it -> [it.name.split('_')[0], it] }
+    .groupTuple()
+    .set{ ch_input }
+
     // trust4
     TRUST4 (
-        EXTRACT.out.out_reads,
+        ch_input,
         ch_ref,
     )
     ch_versions = ch_versions.mix(TRUST4.out.versions.first())
 
+    TRUST4.out.filter_report_tsv
+    .map { it -> [it.name.split("_")[0].split("temp")[0], it.getParent()] }
+    .groupTuple()
+    .set { merge_input }
+
+    MERGE (merge_input)
+
     // SUMMARIZE
     if (params.seqtype == 'BCR' ) {
-        barcode_report = TRUST4.out.barcode_report_b
+        barcode_report = MERGE.out.barcode_report_b
     } else {
-        barcode_report = TRUST4.out.barcode_report_t
+        barcode_report = MERGE.out.barcode_report_t
     }
     SUMMARIZE (
         EXTRACT.out.out_reads,
         params.seqtype,
         params.coef,
         params.expected_target_cell_num,
-        TRUST4.out.assembled_reads,
-        TRUST4.out.filter_report_tsv,
-        TRUST4.out.annot_fa,
+        MERGE.out.assembled_reads,
+        MERGE.out.filter_report_tsv,
+        MERGE.out.annot_fa,
         barcode_report
     )
     ch_multiqc_files = ch_multiqc_files.mix(SUMMARIZE.out.json.collect{it[1]})

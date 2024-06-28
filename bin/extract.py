@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 
 import argparse
-from collections import Counter
+import random
+from collections import defaultdict
 
 import parse_protocol
 import pyfastx
 import utils
 from __init__ import ASSAY
+
+SPLIT_N_CHUNKS = 4
 
 
 class Auto(parse_protocol.Auto):
@@ -57,7 +60,7 @@ if __name__ == "__main__":
     raw_reads = 0
     valid_reads = 0
     corrected_reads = 0
-    barcode_read_counter = Counter()
+    barcode_read_counter = defaultdict(int)
     for fq1, fq2 in zip(fq1_list, fq2_list):
         fq1 = pyfastx.Fastx(fq1)
         fq2 = pyfastx.Fastx(fq2)
@@ -65,7 +68,6 @@ if __name__ == "__main__":
         for (name1, seq1, qual1), (name2, seq2, qual2) in zip(fq1, fq2):
             raw_reads += 1
             bc_list = [utils.rev_compl(seq1[x]) for x in pattern_dict["C"]][::-1]
-            print(bc_list)
             valid, corrected, corrected_seq = parse_protocol.check_seq_mismatch(bc_list, raw_list, mismatch_list)
             if valid:
                 valid_reads += 1
@@ -75,13 +77,40 @@ if __name__ == "__main__":
                 bc = corrected_seq
                 read_name = f"{bc}:{umi}:{raw_reads}"
                 qual1 = "F" * len(bc + umi)
-                barcode_read_counter.update(bc)
+                barcode_read_counter[bc] += 1
                 if barcode_read_counter[bc] <= 40000:
                     outdict[1].write(utils.fastq_str(read_name, bc + umi, qual1))
                     outdict[2].write(utils.fastq_str(read_name, seq2, qual2))
+
+    outdict[1].close()
+    outdict[2].close()
 
     fn = f"{args.sample}.{ASSAY}.extract.stats.json"
     metrics = {"Raw Reads": raw_reads}
     metrics["Valid Reads"] = utils.get_frac(valid_reads / raw_reads)
     metrics["Corrected Barcodes"] = utils.get_frac(corrected_reads / valid_reads)
     utils.write_json(metrics, fn)
+
+    # split fastq
+    barcode_list = list(barcode_read_counter.keys())
+    random.shuffle(barcode_list)
+    barcode_num = len(barcode_list)
+    step = barcode_num // SPLIT_N_CHUNKS
+    split_barcodes = [barcode_list[i : i + step] for i in range(0, barcode_num, step)]
+    split_barcodes = [set(i) for i in split_barcodes]
+
+    fq1_list = [utils.openfile(f"temp/{args.sample}temp{i}_R1.fq.gz", "wt") for i in range(SPLIT_N_CHUNKS)]
+    fq2_list = [utils.openfile(f"temp/{args.sample}temp{i}_R2.fq.gz", "wt") for i in range(SPLIT_N_CHUNKS)]
+    fq1 = pyfastx.Fastx(f"{args.sample}_R1.fq.gz")
+    fq2 = pyfastx.Fastx(f"{args.sample}_R2.fq.gz")
+    for (name1, seq1, qual1), (name2, seq2, qual2) in zip(fq1, fq2):
+        bc = name1.split(":")[0]
+        for i in range(SPLIT_N_CHUNKS):
+            if bc in split_barcodes[i]:
+                fq1_list[i].write(utils.fastq_str(name1, seq1, qual1))
+                fq2_list[i].write(utils.fastq_str(name2, seq2, qual2))
+                break
+
+    for i in range(SPLIT_N_CHUNKS):
+        fq1_list[i].close()
+        fq2_list[i].close()
